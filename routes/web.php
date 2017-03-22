@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// This says to use the index method of BookController:
+Route::get('/books', 'BookController@index');
+
+// This says to use the view method of BookController:
+Route::get('/books/{title?}', 'BookController@view');
+
+// I didn't have to specify an @ sign followed by a method name, because
+// WelcomeController automatically runs the __invoke method:
+Route::get('/', 'WelcomeController');
+
+
+// Practice
+// "any" is a Laravel wildcard that causes this route to work with ANY http verb,
+// whether that verb be get, post, or whatever.  all http verbs will match.
+Route::any('/practice/{n?}', 'PracticeController@index');
