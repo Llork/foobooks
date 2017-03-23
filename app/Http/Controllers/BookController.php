@@ -6,23 +6,26 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    /**
-    * GET
-    * /books
-    */
+
     public function index() {
-        return 'View all the books...';
+        return 'This is the index function.';
     }
 
-    /**
-    * GET
-    * /books/{title?}
-    */
-    public function view($title = null) {
-        return 'You want to view the cool book ' . $title;
-    }
 
+// Commenting the view function out caused an error condition because
+// web.php expected the view function to exist here in BookController:
+/*
+    public function view() {
+        return 'This is the view function.';
+    }
+*/
+
+// this uses the helper function 'view':
+    public function show($title = null) {
+        return view('books.show')->with([
+            'title' => $title,
+        ]);
+    }
 
 
 }
- 
