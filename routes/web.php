@@ -20,9 +20,6 @@ Route::get('/books/{title?}', 'BookController@show');
 // Route::get('/search', 'BookController@search');
 
 
-// Log viewer (I still need to install this)
-
-
 // Welcome page when nothing is specified in url after /
 // I didn't have to specify an @ sign followed by a method name, because
 // WelcomeController automatically runs the __invoke method:
@@ -33,3 +30,8 @@ Route::get('/', 'WelcomeController');
 // "any" is a Laravel wildcard that causes this route to work with ANY http verb,
 // whether that verb be get, post, or whatever.  all http verbs will match.
 Route::any('/practice/{n?}', 'PracticeController@index');
+
+
+// This is for Laravel log viewer.
+// To view the log, go to http://foobooks.loc/logs
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

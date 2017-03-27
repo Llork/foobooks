@@ -1,0 +1,13 @@
++--------+--------------------------------+------------------------------+----------------------+---------------------------------------------------------------+--------------+
+| Domain | Method                         | URI                          | Name                 | Action                                                        | Middleware   |
++--------+--------------------------------+------------------------------+----------------------+---------------------------------------------------------------+--------------+
+|        | GET|HEAD                       | /                            |                      | App\Http\Controllers\WelcomeController                        | web          |
+|        | GET|HEAD                       | _debugbar/assets/javascript  | debugbar.assets.js   | Barryvdh\Debugbar\Controllers\AssetController@js              |              |
+|        | GET|HEAD                       | _debugbar/assets/stylesheets | debugbar.assets.css  | Barryvdh\Debugbar\Controllers\AssetController@css             |              |
+|        | GET|HEAD                       | _debugbar/clockwork/{id}     | debugbar.clockwork   | Barryvdh\Debugbar\Controllers\OpenHandlerController@clockwork |              |
+|        | GET|HEAD                       | _debugbar/open               | debugbar.openhandler | Barryvdh\Debugbar\Controllers\OpenHandlerController@handle    |              |
+|        | GET|HEAD                       | api/user                     |                      | Closure                                                       | api,auth:api |
+|        | GET|HEAD                       | books                        |                      | App\Http\Controllers\BookController@index                     | web          |
+|        | GET|HEAD                       | books/{title?}               |                      | App\Http\Controllers\BookController@show                      | web          |
+|        | GET|HEAD|POST|PUT|PATCH|DELETE | practice/{n?}                |                      | App\Http\Controllers\PracticeController@index                 | web          |
++--------+--------------------------------+------------------------------+----------------------+---------------------------------------------------------------+--------------+
