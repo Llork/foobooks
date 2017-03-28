@@ -1,37 +1,33 @@
 <?php
 
-// This says to use the index method of BookController:
+/**
+* Book related routes
+*/
 Route::get('/books', 'BookController@index');
 
+Route::get('/books/new', 'BookController@createNewBook');
+Route::post('/books/new', 'BookController@storeNewBook');
 
-// This says to use the show method of BookController:
 Route::get('/books/{title?}', 'BookController@show');
 
+Route::get('/search', 'BookController@search');
 
-// The following line caused an error condition when I removed the view
-// method from BookController, because I wanted to use the built-in Laravel
-// helper function view instead.  The error, in hindsight is clear -- it says
-// that BookController has no 'view' function, which obviously is true after
-// I removed it!
-// Route::get('/books/{title?}', 'BookController@view');
-
-
-// I think will be covered in Lecture 8:
-// Route::get('/search', 'BookController@search');
+/**
+* Log viewer
+* (only accessible locally)
+*/
+if(config('app.env') == 'local') {
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+}
 
 
-// Welcome page when nothing is specified in url after /
-// I didn't have to specify an @ sign followed by a method name, because
-// WelcomeController automatically runs the __invoke method:
-Route::get('/', 'WelcomeController');
-
-
-// Practice
-// "any" is a Laravel wildcard that causes this route to work with ANY http verb,
-// whether that verb be get, post, or whatever.  all http verbs will match.
+/**
+* Practice
+*/
 Route::any('/practice/{n?}', 'PracticeController@index');
 
 
-// This is for Laravel log viewer.
-// To view the log, go to http://foobooks.loc/logs
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+/**
+* Main homepage visitors see when they visit just /
+*/
+Route::get('/', 'WelcomeController');
