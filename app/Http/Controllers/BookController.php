@@ -7,26 +7,24 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
 
+    /**
+	* GET
+    * /books
+	*/
     public function index() {
-        return 'This is the index function.';
+        return 'View all the books...';
     }
 
 
-// Commenting the view function out caused an error condition because
-// web.php expected the view function to exist here in BookController:
-/*
-    public function view() {
-        return 'This is the view function.';
-    }
-*/
-
-// this uses the helper function 'view':
+    /**
+	* GET
+    * /books/{title?}
+	*/
     public function show($title = null) {
         return view('books.show')->with([
             'title' => $title,
         ]);
     }
-
 
 
     /**
@@ -86,10 +84,39 @@ class BookController extends Controller
     }
 
 
+    /**
+    * GET
+    * /books/new
+    * Display the form to add a new book
+    */
+    public function createNewBook(Request $request) {
+        return view('books.new');
+    }
 
 
 
+    /**
+    * POST
+    * /books/new
+    * Process the form for adding a new book
+    */
+    public function storeNewBook(Request $request) {
 
+        $this->validate($request, [
+            'title' => 'required|min:3',
+            'publishedYear' => 'required|numeric',
+        ]);
 
+        $title = $request->input('title');
+
+        #
+        #
+        # [...Code will eventually go here to actually save this book to a database...]
+        #
+        #
+
+        # Redirect the user to the page to view the book
+        return redirect('/books/'.$title);
+    }
 
 }
