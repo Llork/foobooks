@@ -5,9 +5,8 @@
 /**
 * Main homepage visitors see when they visit just /
 */
-Route::get('/', 'WelcomeController');
-
-
+//Route::get('/', 'WelcomeController');
+Route::get('/', 'BookController@index');
 
 
 /**
