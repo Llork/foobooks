@@ -3,6 +3,14 @@
 
 
 /**
+* Main homepage visitors see when they visit just /
+*/
+Route::get('/', 'WelcomeController');
+
+
+
+
+/**
 * Practice
 */
 Route::any('/practice/{n?}', 'PracticeController@index');
@@ -38,10 +46,6 @@ if(config('app.env') == 'local') {
 
 
 
-/**
-* Main homepage visitors see when they visit just /
-*/
-Route::get('/', 'WelcomeController');
 
 
 

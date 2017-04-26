@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Book;
+use Session;
 
 class BookController extends Controller
 {
@@ -12,7 +14,18 @@ class BookController extends Controller
     * /books
 	*/
     public function index() {
-        return 'View all the books...';
+
+        $books = Book::orderBy('title')->get(); # Query DB
+
+        $newBooks = Book::orderBy('created_at', 'descending')->limit(3)->get(); # Query DB
+
+        #$newBooks = $books->sortByDesc('created_at')->take(3); # Query existing Collection
+
+        return view('books.index')->with([
+            'books' => $books,
+            'newBooks' => $newBooks
+        ]);
+
     }
 
 
@@ -104,19 +117,70 @@ class BookController extends Controller
 
         $this->validate($request, [
             'title' => 'required|min:3',
-            'publishedYear' => 'required|numeric',
+            'published' => 'required|numeric',
+            'cover' => 'required|url',
+            'purchase_link' => 'required|url'
         ]);
 
-        $title = $request->input('title');
+        # Add new book to database
+        $book = new Book();
+        $book->title = $request->title;
+        $book->published = $request->published;
+        $book->cover = $request->cover;
+        $book->purchase_link = $request->purchase_link;
+        $book->save();
 
-        #
-        #
-        # [...Code will eventually go here to actually save this book to a database...]
-        #
-        #
+        Session::flash('message', 'The book '.$request->title.' was added.');
 
-        # Redirect the user to the page to view the book
-        return redirect('/books/'.$title);
+        # Redirect the user to book index
+        return redirect('/books');
+    }
+
+    /**
+	* GET
+    * /books/edit/{id}
+	*/
+    public function edit($id) {
+
+        $book = Book::find($id);
+
+        if(is_null($book)) {
+            Session::flash('message', 'Book not found.');
+            return redirect('/books');
+        }
+
+        return view('books.edit')->with([
+            'id' => $id,
+            'book' => $book,
+        ]);
+
+    }
+
+    /**
+	* POST
+    * /books/edit
+	*/
+    public function saveEdits(Request $request) {
+
+        $this->validate($request, [
+            'title' => 'required|min:3',
+            'published' => 'required|numeric',
+            'cover' => 'required|url',
+            'purchase_link' => 'required|url'
+        ]);
+
+        $book = Book::find($request->id);
+
+        # Edit book in the database
+        $book->title = $request->title;
+        $book->published = $request->published;
+        $book->cover = $request->cover;
+        $book->purchase_link = $request->purchase_link;
+        $book->save();
+
+        Session::flash('message', 'Your changes were saved');
+        return redirect('/books/edit/'.$request->id);
+
     }
 
 }

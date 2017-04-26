@@ -8,10 +8,241 @@ use App\Book;
 
 class PracticeController extends Controller
 {
+
+    // http://foobooks.loc/practice/99
+    public function practice99() {
+/*
+        #Get all rows:
+        $result = Book::all();
+        dump($result->toArray());
+
+        #Get row where id is 1:
+        $wow = Book::find(1);
+        dump($wow->toArray());
+        // The problem with find is that if the row isn't found, you get
+        // Whoops, looks like something went wrong.
+        // FatalThrowableError in PracticeController.php line 25:
+        // Call to a member function toArray() on null
+
+        # Throw an exception if the lookup fails
+        $result = Book::findOrFail(9999);
+        dump($result->toArray());
+        // I don't get findOrFail either, this query at least
+        // doesn't get a fatal error, but gets this:
+        // Sorry, the page you are looking for could not be found.
+        // NotFoundHttpException in Handler.php line 131:
+        // No query results for model [App\Book] 9999
+
+        # Get all rows with a `where` constraint using fuzzy matching
+        $result = Book::where('title', 'LIKE', '%The%')->get();
+        dump($result->toArray());
+        // 'the' is considered a match, it's not case sensitive
+
+        # Get all rows with a `where` constraint using exact matching
+        $result = Book::where('title', '=', 'The Great Gatsby   ')->get();
+        dump($result->toArray());
+        // my adding blanks after The Great Gatsby didn't cause match to
+        // fail, but adding blanks before The Great Gatsby caused match
+        // to fail.
+
+        # Get rows with a `orderBy` constraint
+        # By default order is ascending
+        $result = Book::orderBy('published')->get();
+        dump($result->toArray());
+
+        # A second param can be passed to `orderBy` constraint to specify descending order
+        $result = Book::orderBy('published', 'desc')->get();
+        dump($result->toArray());
+
+        # `orderBy` constraints can be chained to order by multiple rows
+        $result = Book::orderBy('published')->orderBy('title', 'desc')->get();
+        dump($result->toArray());
+
+        # Chain two `where` constraints
+        $result = Book::where('published', '>', '1960')->where('id', '<', 5 )->get();
+        dump($result->toArray());
+
+        # Chain a `where` and a `orWhere` constraint
+        $result = Book::where('published', '>', '1960')->orWhere('id', '<', 5 )->get();
+        dump($result->toArray());
+
+        # `whereIn` constraint
+        $result = Book::whereIn('id', [1, 2])->get();
+        dump($result->toArray());
+
+        # Get just the first result of a query by using the `first` fetch method
+        $result = Book::where('title', 'LIKE', '%Gatsby%')->orderBy('created_at')->first();
+        dump($result);
+
+        # Throw an exception if the query fails
+        $result = Book::where('title', '=', 'The Great Gatsbyyyyy')->firstOrFail();
+        dump($result->toArray());
+
+        # Count how many rows match a `where` constraint using the `count` fetch method
+        $result = Book::where('title', 'LIKE', '%Gatsby%')->count();
+        dump($result);
+
+        # Limit the amount of results a query will return
+        $result = Book::where('published', '>', 1800)->limit(2)->get();
+        dump($result->toArray());
+
+        # Get a single column's value from the first result of a query
+        $result = Book::where('published', '>', 1800)->orderBy('published')->value('title');
+        dump($result);
+
+        # Determine if a row exists using the `exists` fetch method (returns a boolean value)
+        $result = Book::where('title', '=', 'The Great Gatsby')->exists();
+        dump($result);
+
+        # Execute a raw SQL select
+        $result = Book::raw('SELECT * FROM books WHERE title LIKE %Gatsby%')->get();
+        dump($result->toArray());
+
+        # Delete a row by id
+        $result = Book::destroy(1);
+        dump($result);
+
+        # Delete any rows matching a `where` constraint
+        $result = Book::where('title', '=', 'The Great Gatsby')->delete();
+        dump($result);
+
+        // Retrieve the last 5 books that were added to the books table.
+        $result = Book::orderBy('created_at','desc')->limit(5)->get();
+        dump($result->toArray());
+
+        // Retrieve all the books published after 1950.
+        $result = Book::where('published','>','1950')->get();
+        dump($result->toArray());
+
+        // Retrieve all the books in alphabetical order by title.
+        $result = Book::orderBy('title')->get();
+        dump($result->toArray());
+
+        // Remove any books by the author “J.K. Rowling”.
+*/
+        // Retrieve all the books in descending order according to published date.
+        $result = Book::orderBy('published','desc')->get();
+        dump($result->toArray());
+
+    } // end of practice method 99
+
+
+
+
+
+
+// http://foobooks.loc/practice/98
+public function practice98() {
+
+    // Find any books by the author Carl Sagan and update the author name to be carl sagan (lowercase).
+
+    // To update a row in a table, you first have to select which row(s) you wish to edit.
+    // Then you can alter the properties of the row and then save those changes using the save method.
+
+    # First get a book to update
+    $book = Book::where('author', 'LIKE', '%Sagan%')->first();
+
+    if(!$book) {
+        dump("Book not found, can't update.");
+    }
+    else {
+
+        # Change one or more properties
+        //$book->title = 'The Really Great Gatsby';
+        $book->author = strtoupper($book->author);
+
+        # Save the changes
+        $book->save();
+
+        dump('Update complete; check the database to confirm the update worked.');
+    }
+
+} // end of practice method 98
+
+
+
+
+
+
+
+// http://foobooks.loc/practice/97
+public function practice97() {
+
+    // Find any books by the author Carl Sagan and update the author name to be carl sagan (lowercase).
+
+    // To update a row in a table, you first have to select which row(s) you wish to edit.
+    // Then you can alter the properties of the row and then save those changes using the save method.
+
+    # this works:
+    //$books = Book::where('author', 'LIKE', '%Sagan%')->update(['author' => 'sagantest2']);
+
+    # this doesn't work, it causes error
+    // Whoops, looks like something went wrong.
+    // ErrorException in PracticeController.php line 179:
+    // Use of undefined constant author - assumed 'author'
+    //$books = Book::where('author', 'LIKE', '%Sagan%')->update(['author' => strtoupper(author)]);
+
+    # this doesn't work, it changes author field to the string 'AUTHOR'
+    //$books = Book::where('author', 'LIKE', '%Sagan%')->update(['author' => strtoupper('author')]);
+
+    # THIS WORKS, IT MAKES THE AUTHOR OF BOTH SAGAN BOOKS LOWER CASE:
+    $books = Book::where('author', 'LIKE', '%Sagan%')->get();
+    foreach($books as $book) {
+        $book->author = strtolower($book->author);
+        $book->save();
+    }
+
+    dump('Update complete; check the database to confirm the update worked.');
+
+} // end of practice method 97
+
+
+
+
+
+public function practice96() {
+        Book::where('author','LIKE','J.K. Rowling')->delete();
+        # Resulting SQL: delete from `books` where `author` LIKE 'J.K. Rowling'
+        return 'Deleted all books where author like J.K. Rowling';
+    } // end of practice method 96
+
+
+
+public function practice95() {
+
+        #Get all rows:
+        $tonOfBooks = Book::all();
+
+        // these both work:
+
+        echo 'THIS USES DUMP STATEMENT:<br>';
+        dump($tonOfBooks);
+
+        echo '<br><br>THIS USES ECHO STATEMENT:<br>';
+        echo($tonOfBooks);
+
+        echo '<br><br>THIS USES ARRAY NOTATION:<br>';
+        #this works with array notation:
+        foreach($tonOfBooks as $oneSingleBook) {
+            dump($oneSingleBook['title']);
+        }
+
+        echo '<br><br>THIS USES OBJECT NOTATION:<br>';
+        # this works with object notation:
+        foreach($tonOfBooks as $oneSingleBook) {
+            dump($oneSingleBook->title);
+        }
+
+}
+
+
+
+
+
     // PRACTICE METHOD 11 from lecture 11 part 3 minute 41
     // (in the video, Susan's 'practice 9 - update', magically turns into
     // practice 10... that's why I have no practice 10.)
-    // Delete a row (the 'U' in 'CRUD')
+    // Delete a row (the 'D' in 'CRUD')
     // to run this, use the following url:
     // http://foobooks.loc/practice/11
     public function practice11() {
