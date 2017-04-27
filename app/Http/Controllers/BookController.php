@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Book;
-use Session;
+use Session; // this is required in order to use the Session object to set the flash msg.
 
 class BookController extends Controller
 {
@@ -130,7 +130,9 @@ class BookController extends Controller
         $book->purchase_link = $request->purchase_link;
         $book->save();
 
-        Session::flash('message', 'The book '.$request->title.' was added.');
+        // "Session::flash" is you saying "session...set" the message,
+        // whereas the master layout gets (obtains) the flash message.
+        Session::flash('message', 'The book ' . $request->title . ' was added.');
 
         # Redirect the user to book index
         return redirect('/books');
